@@ -1,9 +1,8 @@
 #!/bin/sh
 
-gunicorn \
+cd /code && gunicorn \
     -w 4 \
     -k uvicorn.workers.UvicornWorker \
     -b :8080 \
-    --log-level warning example:app \
-    --reload \
+    --log-level warning \
     leaderboard.app:app

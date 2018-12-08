@@ -1,4 +1,10 @@
 
+export HASH ?= $(shell bin/tag.sh)
+
+.PHONY: yaml
+yaml:
+	@cat leaderboard.yml | envsubst
+
 .PHONY: serve
 serve:
 	gunicorn \
@@ -26,6 +32,14 @@ dev:
 		--build
 	-docker exec -it frontend /bin/sh
 	$(MAKE) down
+
+.PHONY: build
+build:
+	docker-compose -f compose/base.yml build
+
+.PHONY: push
+push: build
+	docker push thomasr/hpa-frontend:$(HASH)
 
 .PHONY: logs
 logs:

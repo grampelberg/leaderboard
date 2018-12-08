@@ -1,0 +1,5 @@
+starlette[full]
+uvicorn
+pip-tools
+gunicorn
+aioredis

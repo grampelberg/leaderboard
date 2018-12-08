@@ -1,0 +1,57 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web
+  namespace: emojivoto
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: web
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+  - type: Pods
+    pods:
+      metricName: response_latency_ms
+      targetAverageValue: 20
+
+---
+
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: voting
+  namespace: emojivoto
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: voting
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+  - type: Pods
+    pods:
+      metricName: response_latency_ms
+      targetAverageValue: 20
+
+---
+
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emoji
+  namespace: emojivoto
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: emoji
+  minReplicas: 1
+  maxReplicas: 100
+  metrics:
+  - type: Pods
+    pods:
+      metricName: response_latency_ms
+      targetAverageValue: 20

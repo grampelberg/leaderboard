@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  frontend:
+    container_name: frontend
+    image: thomasr/hpa-frontend:latest
+    build:
+      context: ..
+      dockerfile: Dockerfile
+
+    ports:
+      - 8080:8080
+
+  redis:
+    image: redis:5-alpine

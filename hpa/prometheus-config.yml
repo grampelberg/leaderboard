@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  latency_rules.yml: |-
+    groups:
+      - name: latency
+        rules:
+          - record: job:response_latency_ms:50th
+            expr: histogram_quantile(0.50, sum(irate(response_latency_ms_bucket{namespace!="",pod!="", direction="inbound"}[5m])) by (le, pod, namespace))
+
+          - record: job:response_latency_ms:95th
+            expr: histogram_quantile(0.95, sum(irate(response_latency_ms_bucket{namespace!="",pod!="", direction="inbound"}[5m])) by (le, pod, namespace))
+
+          - record: job:response_latency_ms:99th
+            expr: histogram_quantile(0.99, sum(irate(response_latency_ms_bucket{namespace!="",pod!="", direction="inbound"}[5m])) by (le, pod, namespace))
+
+  prometheus.yml: |-
+    rule_files:
+      - /etc/prometheus/*_rules.yml
+
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: linkerd

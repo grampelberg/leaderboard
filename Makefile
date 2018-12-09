@@ -5,15 +5,9 @@ export HASH ?= $(shell bin/tag.sh)
 yaml:
 	@cat leaderboard.yml | envsubst
 
-.PHONY: demo
-demo:
-	$(MAKE) yaml | kubectl apply -f -
-
-	kubectl apply -f external.yml
-
-	kubectl -n leaderboard get deploy web -o yaml | \
-		linkerd inject --skip-outbound-ports=6379 - | \
-		kubectl apply -f -
+# ==============================================================================
+# Development
+# ==============================================================================
 
 .PHONY: serve
 serve:
@@ -62,3 +56,36 @@ down:
 .PHONY: update-lock
 update-lock:
 	pip-compile --output-file requirements.txt requirements.in
+
+# ==============================================================================
+# Demo
+# ==============================================================================
+
+.PHONY: setup-system
+setup-system:
+	linkerd install | kubectl apply -f -
+
+	helm repo update
+	helm -n linkerd --namespace linkerd \
+		install stable/prometheus-adapter \
+		-f hpa/prometheus-adapter.yml
+
+.PHONY: verify-system
+verify-system:
+	kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1
+
+	kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/leaderboard/pods/*/response_latency_ms_99th" | \
+	  jq .
+
+.PHONY: demo
+demo:
+	$(MAKE) yaml | kubectl apply -f -
+
+	kubectl apply -f external.yml
+
+	kubectl -n leaderboard get deploy web -o yaml | \
+		linkerd inject - | \
+		kubectl apply -f -
+
+	kubectl apply -f hpa/policy.yml
+	kubectl apply -f load.yml

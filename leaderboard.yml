@@ -83,7 +83,6 @@ metadata:
 spec:
   selector:
     app: redis
-  clusterIP: None
   ports:
     - name: redis
       port: 3306

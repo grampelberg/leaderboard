@@ -57,6 +57,7 @@ down:
 update-lock:
 	pip-compile --output-file requirements.txt requirements.in
 
+
 # ==============================================================================
 # Demo
 # ==============================================================================
@@ -72,7 +73,7 @@ setup-system:
 
 .PHONY: verify-system
 verify-system:
-	kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1
+	kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1 | jq .
 
 	kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/leaderboard/pods/*/response_latency_ms_99th" | \
 	  jq .
@@ -87,5 +88,5 @@ demo:
 		linkerd inject - | \
 		kubectl apply -f -
 
-	kubectl apply -f hpa/policy.yml
-	kubectl apply -f load.yml
+	# kubectl apply -f hpa/policy.yml
+	# kubectl apply -f load.yml

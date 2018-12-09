@@ -20,15 +20,15 @@ spec:
         app: web
     spec:
       containers:
-      - image: thomasr/hpa-frontend:${HASH}
-        name: web
-        command: ["/code/bin/run.sh"]
-        ports:
-        - containerPort: 8080
-          name: http
-        resources:
-          requests:
-            cpu: 1000m
+        - image: thomasr/hpa-frontend:${HASH}
+          name: web
+          command: ["/code/bin/run.sh"]
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              cpu: 1000m
 
 ---
 
@@ -41,18 +41,22 @@ spec:
   selector:
     app: web
   ports:
-  - name: http
-    port: 8080
-    targetPort: 8080
+    - name: http
+      port: 8080
+      targetPort: 8080
 
 ---
 
-apiVersion: apps/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: redis
   namespace: leaderboard
 spec:
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: redis
   replicas: 1
   template:
     metadata:
@@ -60,15 +64,14 @@ spec:
         app: redis
     spec:
       containers:
-      - env:
-        image: redis:5-alpine
-        name: redis
-        ports:
-        - containerPort: 6379
+        - image: redis:5-alpine
           name: redis
-        resources:
-          requests:
-            cpu: 500m
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+            requests:
+              cpu: 500m
 
 ---
 
@@ -82,6 +85,6 @@ spec:
     app: redis
   clusterIP: None
   ports:
-  - name: redis
-    port: 6379
-    targetPort: 6379
+    - name: redis
+      port: 3306
+      targetPort: 6379

@@ -12,11 +12,9 @@ kubectl -n leaderboard get deploy web -o yaml | \
   kubectl apply -f -
 
 cat load.yml | \
-  linkerd inject --proxy-log-level=warn,linkerd2_proxy=info,linkerd2_proxy::app::outbound::discovery=debug - | \
+  linkerd inject --proxy-log-level=warn,linkerd2_proxy=info,linkerd2_proxy::app::outbound::discovery=debug,tower_balance=trace - | \
   kubectl apply -f -
 ```
-
-
 
 ## Development
 

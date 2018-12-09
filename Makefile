@@ -5,6 +5,16 @@ export HASH ?= $(shell bin/tag.sh)
 yaml:
 	@cat leaderboard.yml | envsubst
 
+.PHONY: demo
+demo:
+	$(MAKE) yaml | kubectl apply -f -
+
+	kubectl apply -f external.yml
+
+	kubectl -n leaderboard get deploy web -o yaml | \
+		linkerd inject --skip-outbound-ports=6379 - | \
+		kubectl apply -f -
+
 .PHONY: serve
 serve:
 	gunicorn \

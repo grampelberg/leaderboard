@@ -39,7 +39,7 @@ async def create_pool():
   global redis
 
   redis = await aioredis.create_redis_pool(
-    'redis://redis',
+    'redis://redis:3306',
     minsize=5,
     maxsize=10,
     loop=loop,

@@ -1,5 +1,5 @@
 prometheus:
-  url: http://prometheus.linkerd.svc
+  url: http://linkerd-prometheus.linkerd.svc
 
 rules:
   default: false

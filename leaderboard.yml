@@ -28,7 +28,7 @@ spec:
           name: http
         resources:
           requests:
-            cpu: 100m
+            cpu: 1000m
 
 ---
 
@@ -40,7 +40,6 @@ metadata:
 spec:
   selector:
     app: web
-  clusterIP: None
   ports:
   - name: http
     port: 8080

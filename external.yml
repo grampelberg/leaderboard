@@ -1,0 +1,15 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-external
+  namespace: leaderboard
+spec:
+  selector:
+    app: web
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080

@@ -39,8 +39,8 @@ async def create_pool():
   global redis
 
   redis = await aioredis.create_redis_pool(
-    'redis://redis:3306',
-    minsize=5,
+    'redis://redis:{}'.format(os.environ.get('PORT', 3306)),
+    minsize=0,
     maxsize=10,
     loop=loop,
     encoding='utf-8')

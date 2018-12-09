@@ -16,6 +16,7 @@ serve:
 		-k uvicorn.workers.UvicornWorker \
 		-b :8080 \
 		-e DEV=true \
+		-e PORT=6379 \
 		--reload \
 		leaderboard.app:app
 
@@ -57,7 +58,6 @@ down:
 update-lock:
 	pip-compile --output-file requirements.txt requirements.in
 
-
 # ==============================================================================
 # Demo
 # ==============================================================================
@@ -82,11 +82,17 @@ verify-system:
 demo:
 	$(MAKE) yaml | kubectl apply -f -
 
-	kubectl apply -f external.yml
+	kubectl apply -f external.yml -f load.yml
 
-	kubectl -n leaderboard get deploy web -o yaml | \
+	kubectl -n leaderboard get deploy -o yaml | \
 		linkerd inject - | \
 		kubectl apply -f -
 
-	# kubectl apply -f hpa/policy.yml
-	# kubectl apply -f load.yml
+	kubectl apply -f hpa/policy.yml
+
+.PHONY: schema
+schema:
+	curl http://localhost:8001/api/v1/namespaces/leaderboard/services/web:http/proxy/schema | \
+		linkerd -n leaderboard profile web --open-api - | \
+		kubectl apply -f -
+

@@ -1,0 +1,11 @@
+digraph G {
+  graph [bgcolor="transparent" dpi=300]
+  node [shape=box]
+  rankdir=LR
+
+  "k8s-prometheus-adapter" [shape=box style=rounded color=green]
+
+  "kubectl" -> "API Server"
+  "API Server" -> "k8s-prometheus-adapter"
+  "k8s-prometheus-adapter" -> "prometheus"
+}

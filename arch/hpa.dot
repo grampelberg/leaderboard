@@ -1,0 +1,11 @@
+digraph G {
+  graph [bgcolor="transparent" dpi=300]
+  node [shape=box]
+  rankdir=LR
+
+  "Horizontal Pod Autoscaler" [shape=box style=rounded color=green]
+
+  "Horizontal Pod Autoscaler" -> "API Server"
+  "API Server" -> "Prometheus"
+  "Prometheus" -> "Application"
+}

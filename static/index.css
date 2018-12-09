@@ -1,6 +1,14 @@
+html {
+  height: 100%;
+}
+
 body {
   font-family: 'Lato', sans-serif;
   font-family: 'Roboto', sans-serif;
 
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   background: linear-gradient(124deg, #9B51E0 0%, #FF009B 23.76%, #F2C94C 47.51%, #2F80ED 78.45%, #219653 100%)
 }

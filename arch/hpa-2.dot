@@ -1,0 +1,8 @@
+digraph G {
+  graph [bgcolor="transparent" dpi=300]
+  node [shape=box]
+  rankdir=LR
+
+  "Horizontal Pod Autoscaler" -> "Deployment"
+  "Deployment" -> "Pods"
+}

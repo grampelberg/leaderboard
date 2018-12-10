@@ -3,7 +3,7 @@ version: '2'
 services:
   frontend:
     container_name: frontend
-    image: thomasr/hpa-frontend:${HASH}
+    image: thomasr/hpa-frontend:v1
     build:
       context: ..
       dockerfile: Dockerfile

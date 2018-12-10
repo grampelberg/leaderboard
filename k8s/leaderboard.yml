@@ -20,7 +20,7 @@ spec:
         app: web
     spec:
       containers:
-        - image: thomasr/hpa-frontend:${HASH}
+        - image: thomasr/hpa-frontend:v1
           imagePullPolicy: Always
           name: web
           command: ["/code/bin/run.sh"]

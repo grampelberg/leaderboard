@@ -1,10 +1,4 @@
 
-export HASH ?= $(shell bin/tag.sh)
-
-.PHONY: yaml
-yaml:
-	@cat leaderboard.yml | envsubst
-
 # ==============================================================================
 # Development
 # ==============================================================================
@@ -44,7 +38,7 @@ build:
 
 .PHONY: push
 push: build
-	docker push thomasr/hpa-frontend:$(HASH)
+	docker push thomasr/hpa-frontend:v1
 
 .PHONY: logs
 logs:
@@ -61,6 +55,12 @@ update-lock:
 # ==============================================================================
 # Demo
 # ==============================================================================
+
+.PHONY: clean
+clean:
+	helm delete --purge linkerd
+	kubectl delete ns linkerd
+	kubectl -n leaderboard delete deploy,statefulset,hpa
 
 .PHONY: setup-system
 setup-system:
@@ -80,9 +80,7 @@ verify-system:
 
 .PHONY: demo
 demo:
-	$(MAKE) yaml | kubectl apply -f -
-
-	kubectl apply -f external.yml -f load.yml
+	kubectl apply -f k8s
 
 	kubectl -n leaderboard get deploy -o yaml | \
 		linkerd inject - | \

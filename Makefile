@@ -60,7 +60,7 @@ update-lock:
 clean:
 	helm delete --purge linkerd
 	kubectl delete ns linkerd
-	kubectl -n leaderboard delete deploy,statefulset,hpa
+	kubectl -n leaderboard delete deploy,statefulset,hpa --all
 
 .PHONY: setup-system
 setup-system:

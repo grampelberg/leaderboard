@@ -13,7 +13,7 @@ spec:
         app: slow-cooker
     spec:
       containers:
-      - image: buoyantio/slow_cooker
+      - image: buoyantio/slow_cooker:1.2.0
         imagePullPolicy: Always
         name: slow-cooker
         env:

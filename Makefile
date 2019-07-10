@@ -59,7 +59,7 @@ update-lock:
 .PHONY: clean
 clean:
 	helm delete --purge linkerd
-	kubectl delete ns linkerd
+	linkerd install --ignore-cluster | kubectl delete -f -
 	kubectl -n leaderboard delete deploy,statefulset,hpa --all
 
 .PHONY: setup-system
@@ -74,6 +74,9 @@ setup-system:
 .PHONY: verify-system
 verify-system:
 	kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1 | jq .
+
+	kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/linkerd/pods/*/response_per_second" | \
+	  jq .
 
 	kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/leaderboard/pods/*/response_latency_ms_99th" | \
 	  jq .

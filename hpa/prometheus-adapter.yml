@@ -27,3 +27,21 @@ rules:
         matches: ^(.*)_bucket$
         as: "${1}_99th"
       metricsQuery: histogram_quantile(0.99, sum(irate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
+
+    - seriesQuery: 'response_total{namespace!="",pod!=""}'
+      resources:
+        template: <<.Resource>>
+      name:
+        matches: "^(.*)_total$"
+        as: "${1}_per_second"
+      metricsQuery: |-
+        sum(
+          irate(
+            <<.Series>>{
+              <<.LabelMatchers>>,
+              direction="inbound"
+            }[5m]
+          )
+        ) by (
+          <<.GroupBy>>
+        )

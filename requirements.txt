@@ -32,7 +32,7 @@ six==1.11.0               # via graphene, graphql-core, graphql-relay, pip-tools
 sqlalchemy==1.2.14        # via starlette
 starlette[full]==0.9.7    # via -r requirements.in
 ujson==1.35               # via starlette
-urllib3==1.24.1           # via requests
+urllib3==1.24.2           # via requests
 uvicorn==0.3.22           # via -r requirements.in
 uvloop==0.11.3            # via uvicorn
 websockets==7.0           # via uvicorn

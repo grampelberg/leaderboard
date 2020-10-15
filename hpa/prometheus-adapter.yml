@@ -10,7 +10,7 @@ rules:
       name:
         matches: ^(.*)_bucket$
         as: "${1}_50th"
-      metricsQuery: histogram_quantile(0.50, sum(irate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
+      metricsQuery: histogram_quantile(0.50, sum(rate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
 
     - seriesQuery: 'response_latency_ms_bucket{namespace!="",pod!=""}'
       resources:
@@ -18,7 +18,7 @@ rules:
       name:
         matches: ^(.*)_bucket$
         as: "${1}_95th"
-      metricsQuery: histogram_quantile(0.95, sum(irate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
+      metricsQuery: histogram_quantile(0.95, sum(rate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
 
     - seriesQuery: 'response_latency_ms_bucket{namespace!="",pod!=""}'
       resources:
@@ -26,7 +26,7 @@ rules:
       name:
         matches: ^(.*)_bucket$
         as: "${1}_99th"
-      metricsQuery: histogram_quantile(0.99, sum(irate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
+      metricsQuery: histogram_quantile(0.99, sum(rate(<<.Series>>{<<.LabelMatchers>>, direction="inbound"}[5m])) by (le, <<.GroupBy>>))
 
     - seriesQuery: 'request_total{namespace!="",pod!=""}'
       resources:
@@ -36,7 +36,7 @@ rules:
         as: "${1}s_per_second"
       metricsQuery: |-
         sum(
-          irate(
+          rate(
             <<.Series>>{
               <<.LabelMatchers>>,
               direction="inbound"
